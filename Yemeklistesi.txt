@@ -1,0 +1,3 @@
+manti 55.00 25 Evet
+kofte 80.00 15 Evet
+kebap 100.00 30 Hayir
