@@ -1,0 +1,20 @@
+ID: 5
+Ad: 5
+Fiyat: 5.00
+Süre: 5.00
+Durum: 5
+Sipariþ: 5
+Hazýrlanma: 5
+Kullanýcý: 5
+Aþçý: 55
+--------------------------------
+ID: 9
+Ad: 9
+Fiyat: 9.00
+Süre: 9.00
+Durum: 9
+Sipariþ: 9
+Hazýrlanma: 9
+Kullanýcý: 9
+Aþçý: 9
+--------------------------------
