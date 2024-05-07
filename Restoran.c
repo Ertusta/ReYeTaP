@@ -46,6 +46,66 @@ void saveMenu(MenuItem menu[], int menuSize, const char *filename) {
     fclose(file);
 }
 
+// Yemek bilgisi güncelleme işlemi
+void updateMenuItem(MenuItem menu[], int *menuSize, const char *filename) {
+    char name[50];
+    printf("Guncellemek istediginiz yemegin adini girin: ");
+    scanf("%49s", name);
+
+    int found = 0;
+    for (int i = 0; i < *menuSize; i++) {
+        if (strcmp(menu[i].name, name) == 0) {
+            printf("Yeni fiyat: ");
+            scanf("%f", &menu[i].price);
+            printf("Yeni hazirlik suresi (dakika): ");
+            scanf("%d", &menu[i].preparationTime);
+            printf("Yeni durum (Evet/Hayir): ");
+            scanf("%19s", menu[i].availability);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Yemek bulunamadi.\n");
+        return;
+    }
+
+    saveMenu(menu, *menuSize, filename);
+    printf("Yemek bilgisi guncellendi.\n");
+}
+
+   // Yemek silme işlemi
+void deleteMenuItem(MenuItem menu[], int *menuSize, const char *filename) {
+    char name[50];
+    printf("Silmek istediginiz yemegin adini girin: ");
+    scanf("%49s", name);
+
+    int found = 0;
+    for (int i = 0; i < *menuSize; i++) {
+        if (strcmp(menu[i].name, name) == 0) {
+            for (int j = i; j < *menuSize - 1; j++) {
+                menu[j] = menu[j + 1];
+            }
+            (*menuSize)--;
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Yemek bulunamadi.\n");
+        return;
+    }
+
+    saveMenu(menu, *menuSize, filename);
+    printf("Yemek silindi.\n");
+}
+
+    
+
+
+
 int main() {
     MenuItem menu[MAX_MENU_ITEMS]; // Menü öğeleri için dizi
     int menuSize = 0; // Menüdeki öğe sayısı
@@ -54,7 +114,7 @@ int main() {
 
     char choice;
     do {
-        printf("Yemek eklemek icin 'e', yemek listesini gormek icin 'l', cikis yapmak icin 'q' girin: ");
+        printf("Yemek eklemek icin 'e'\nyemek listesini gormek icin 'l'\nyemek bilgisi guncellemek icin 'g'\nyemek silmek icin 's'\ncikis yapmak icin 'q' girin: ");
         scanf(" %c", &choice);
 
         if (choice == 'e' || choice == 'E') {
@@ -78,6 +138,10 @@ int main() {
                        menu[i].preparationTime, 
                        menu[i].availability);
             }
+        }else if (choice == 'g' || choice == 'G') {
+            updateMenuItem(menu, &menuSize, filename);
+        } else if (choice == 's' || choice == 'S') {
+            deleteMenuItem(menu, &menuSize, filename);
         }
     } while (choice != 'q' && choice != 'Q');
 
