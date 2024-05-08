@@ -187,9 +187,13 @@ int main() {
 
     char chef='a';
 
-    printf("hello");
+
     FILE *file = fopen(orderFilename, "w"); // "w" modunda açarak mevcut verileri üzerine yaz
 
+  if (file == NULL) {
+        printf("Dosya açma hatası!");
+        return 1; // Programı sonlandır
+    }
 
 
    strcpy(orders->orderId, id);
@@ -200,14 +204,7 @@ int main() {
    strcpy(orders->customer, isim);
    strcpy(orders->chef, chef);
 
-        fprintf(file, "%s %s %.2f %s %d %s %s\n",
-                orders->orderId,
-                orders->foodName,
-                price,
-                orders->orderTime,
-                orders->preparationTime,
-                orders->customer,
-                orders->chef);
+        fprintf(file, "%s %s %.2f %s %d %s %s\n",id,name,price,orderTime,preparationTime,isim,chef);
 
     fclose(file);
 
