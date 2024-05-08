@@ -113,7 +113,7 @@ int main() {
     Order orders[MAX_ORDERS];
     int menuSize = 0, orderSize = 0;
     char menuFilename[] = "yemeklistesi.txt";
-    char orderFilename[] = "siparişler.txt";
+    char orderFilename[] = "Siparisler.txt";
     int counter=0;
 
 
@@ -124,11 +124,13 @@ int main() {
     char istek;
     char id[25];
     scanf("%c",&istek);
+    char isim[25];
+
 
     if(istek=='l')
     {
-        char isim[25];
-        char id[25];
+
+
         printf("isim giriniz:");
         scanf("%s",isim);
 
@@ -155,19 +157,59 @@ int main() {
 
 
     char name[50];
-    int price;
+    float price;
+    char orderTime[20];
+     int preparationTime;
+
     scanf("%49s", name);
 
     int found = 0;
-    for (int i = 0; i < 2; i++) {
-        if (strcmp(menu[i].name, name) == 0) {
-        strcmp(menu[i].price, price);
-        printf("%s",price);
+    for (int i = 0; i < 2; i++)
+        {
+        if (strcmp(menu[i].name, name) == 0)
+            {
+                price=menu[i].price;
+            preparationTime=menu[i].preparationTime;
+
             break;
+            }
         }
-    }
 
 
+
+
+     time_t current_time;
+    struct tm *local_time;
+    current_time = time(NULL);
+    local_time = localtime(&current_time);
+    strftime(orderTime, sizeof(orderTime), "%Y-%m-%d %H:%M:%S", local_time);
+
+
+    char chef='a';
+
+    printf("hello");
+    FILE *file = fopen(orderFilename, "w"); // "w" modunda açarak mevcut verileri üzerine yaz
+
+
+
+   strcpy(orders->orderId, id);
+   strcpy(orders->foodName, name);
+
+   strcpy(orders->orderTime, orderTime);
+   strcpy(orders->preparationTime, preparationTime);
+   strcpy(orders->customer, isim);
+   strcpy(orders->chef, chef);
+
+        fprintf(file, "%s %s %.2f %s %d %s %s\n",
+                orders->orderId,
+                orders->foodName,
+                price,
+                orders->orderTime,
+                orders->preparationTime,
+                orders->customer,
+                orders->chef);
+
+    fclose(file);
 
 
 }

@@ -13,7 +13,7 @@ typedef struct {
     char foodName[50];
     float price;
     char orderTime[20];
-    char preparationTime[20];
+    int preparationTime;
     char customer[20];
     char chef[20];
 } Order;
