@@ -16,6 +16,7 @@ typedef struct {
     int preparationTime;
     char customer[20];
     char chef[20];
+    int state;
 } Order;
 
 #endif 
