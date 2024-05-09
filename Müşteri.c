@@ -185,10 +185,11 @@ int main() {
     strftime(orderTime, sizeof(orderTime), "%Y-%m-%d %H:%M:%S", local_time);
 
 
-    char chef='a';
+    char chef[10]="Sef1";
+    int state=0;
 
 
-    FILE *file = fopen(orderFilename, "w"); // "w" modunda açarak mevcut verileri üzerine yaz
+    FILE *file = fopen("Siparisler.txt", "w"); // "w" modunda açarak mevcut verileri üzerine yaz
 
   if (file == NULL) {
         printf("Dosya açma hatası!");
@@ -196,15 +197,7 @@ int main() {
     }
 
 
-   strcpy(orders->orderId, id);
-   strcpy(orders->foodName, name);
-
-   strcpy(orders->orderTime, orderTime);
-   strcpy(orders->preparationTime, preparationTime);
-   strcpy(orders->customer, isim);
-   strcpy(orders->chef, chef);
-
-        fprintf(file, "%s %s %.2f %s %d %s %s\n",id,name,price,orderTime,preparationTime,isim,chef);
+        fprintf(file, "%s %s %.2f %s %d %s %s %s %d\n",id,name,price,orderTime,preparationTime,isim,chef,state);
 
     fclose(file);
 
