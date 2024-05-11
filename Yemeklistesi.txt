@@ -1,2 +1,2 @@
 manti 50.00 15 Hayir
-kebap 100.00 30 Hayir
+kebap 100.00 30 Evet
