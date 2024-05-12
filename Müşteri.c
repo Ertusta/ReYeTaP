@@ -170,15 +170,16 @@ int main() {
     scanf("%49s", name);
 
     int found = 0;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < menuSize; i++)
         {
-        if (strcmp(menu[i].name, name) == 0)
+        if (strcmp(menu[i].name, name) == 0&&strcmp(menu[i].availability, "Evet") == 0)
             {
             price=menu[i].price;
             preparationTime=menu[i].preparationTime;
 
             break;
             }
+
         }
 
 
