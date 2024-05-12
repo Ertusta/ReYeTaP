@@ -82,45 +82,33 @@ int main() {
     int menuSize = 0, orderSize = 0;
     char menuFilename[] = "yemeklistesi.txt";
     char orderFilename[] = "Siparisler.txt";
-    int satir_sayisi = 0;
 
 
-
-
-
-    printf("Kullanici Id girmek icin 'q' \nyeni hesap icin 'l' tuslayiniz:");
 
     char istek;
-    char id[25];
-    scanf("%c",&istek);
+    char komut;
+    char id[50];
     char isim[25];
     char orderTime[20];
     char kod[20];
 
-    if(istek=='l')
-    {
+
+
+
+
+
+
 
 
         printf("isim giriniz:");
         scanf(" %s",isim);
 
 
-        time_t current_time;
-        struct tm *local_time;
-        current_time = time(NULL);
-        local_time = localtime(&current_time);
-
-        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
-
-        sprintf(id, "%s_%s", isim, kod);
 
 
-    }
-    else if(istek=='q')
-    {
-        printf("id giriniz:");
-        scanf("%s",&id);
-    }
+
+
+
 
 
 
@@ -131,17 +119,28 @@ int main() {
         scanf(" %c",&istek);
 
 
-
+    loadMenu(menu, &menuSize, menuFilename);
 
 
     if(istek=='q')
     {
 
+        time_t current_time;
+        struct tm *local_time;
+        current_time = time(NULL);
+        local_time = localtime(&current_time);
 
+        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
 
-
+        sprintf(id, "Sip_%s", kod);
 
         loadMenu(menu, &menuSize, menuFilename);
+
+        do{
+
+
+
+
 
             printf("Yemek Seciniz:\n");
 
@@ -162,12 +161,12 @@ int main() {
 
 
 
+
     char name[50];
     float price;
-
     int preparationTime;
 
-    scanf("%49s", name);
+    scanf(" %49s", name);
 
     int found = 0;
     for (int i = 0; i < menuSize; i++)
@@ -189,7 +188,7 @@ int main() {
     struct tm *local_time;
     current_time = time(NULL);
     local_time = localtime(&current_time);
-    strftime(orderTime, sizeof(orderTime), "%Y-%m-%d-%H:%M:%S", local_time);
+    strftime(orderTime, sizeof(orderTime), "%Y-%m-%d/%H:%M:%S", local_time);
 
 
     char chef[10]="Sef1";
@@ -212,13 +211,15 @@ int main() {
     fclose(file);
 
 
+    printf("yemek secmeye devam etmek icin l siparisi yollamak icin q tiklayiniz:");
+    scanf(" %c",&komut);
 
 
 
+        }while(komut!= 'q' );
 
     }
-
-    if(istek=='l')
+    else if(istek=='l')
     {
 
     OrderList(orders,&orderSize,orderFilename);
@@ -235,12 +236,12 @@ int main() {
 
 
 
-                if( orders[i].state==0&&strcmp(orders[i].orderId,id) == 0)
+                if( orders[i].state==0&&strcmp(orders[i].customer,isim) == 0)
                 {
 
 
 
-                   printf("%s %s %f %s %d %s %s %d\n",
+                   printf("%s %s %.2f %s %d %s %s %d\n",
                    orders[i].orderId,
                    orders[i].foodName,
                    orders[i].price,
@@ -261,12 +262,12 @@ int main() {
             for (int i = 1; i <orderSize; i++)
             {
 
-                if( orders[i].state==1&&strcmp(orders[i].orderId,id) == 0)
+                if( orders[i].state==1&&strcmp(orders[i].customer,isim) == 0)
                 {
 
 
 
-                   printf("%s %s %f %s %d %s %s %d\n",
+                   printf("%s %s %.2f %s %d %s %s %d\n",
                    orders[i].orderId,
                    orders[i].foodName,
                    orders[i].price,
@@ -295,12 +296,12 @@ int main() {
             for (int i = 0; i <orderSize; i++)
             {
 
-                if( orders[i].state==2&&strcmp(orders[i].orderId,id) == 0)
+                if( orders[i].state==2&&strcmp(orders[i].customer,isim) == 0)
                 {
 
 
 
-                   printf("%s %s %f %s %d %s %s %d\n",
+                   printf("%s %s %.2f %s %d %s %s %d\n",
                    orders[i].orderId,
                    orders[i].foodName,
                    orders[i].price,
@@ -332,7 +333,7 @@ int main() {
 
     }while(istek!='t');
 
-
+return 76;
 
 
 
