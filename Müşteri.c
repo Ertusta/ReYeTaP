@@ -35,19 +35,17 @@ void loadMenu(MenuItem menu[], int *menuSize, const char *filename)
     }
 
 
-void OrderList(Order orders[], int *orderSize, const char *filename)
-{
+void OrderList(Order orders[], int *orderSize, const char *filename) {
     FILE *file = fopen(filename, "r");
-    if (!file)
-    {
-        printf("Dosya acilamadi: %s\n", filename);
+
+    if (!file) {
+        printf("Dosya açılamadı: %s\n", filename);
         return;
     }
 
     char line[100];
     *orderSize = 0;
-    while (fgets(line, sizeof(line), file))
-    {
+    while (fgets(line, sizeof(line), file)) {
         if (sscanf(line, "%s %s %f %s %d %s %s %d",
                    orders[*orderSize].orderId,
                    orders[*orderSize].foodName,
@@ -56,20 +54,24 @@ void OrderList(Order orders[], int *orderSize, const char *filename)
                    &orders[*orderSize].preparationTime,
                    orders[*orderSize].customer,
                    orders[*orderSize].chef,
-                   &orders[*orderSize].state) == 8)
-        {
+                   &orders[*orderSize].state) == 8) {
             (*orderSize)++;
         }
     }
 
-    // Dosyanın sonuna ulaşılıp ulaşılmadığını kontrol et
-    if (!feof(file))
-    {
-        printf("Hata: Dosya sonuna ulasilamadi.\n");
-    }
-
     fclose(file);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -81,6 +83,7 @@ int main() {
     char menuFilename[] = "yemeklistesi.txt";
     char orderFilename[] = "Siparisler.txt";
     int satir_sayisi = 0;
+
 
 
 
@@ -99,7 +102,7 @@ int main() {
 
 
         printf("isim giriniz:");
-        scanf("%s",isim);
+        scanf(" %s",isim);
 
 
         time_t current_time;
@@ -119,13 +122,28 @@ int main() {
         scanf("%s",&id);
     }
 
-    loadMenu(menu, &menuSize, menuFilename);
-    OrderList(orders, &orderSize, orderFilename);
-
-    printf("%d",orderSize);
 
 
-    printf("Yemek Seciniz:\n");
+
+    do{
+
+        printf("siparis vermek icin 'q' \nmevcut ve eski siparisleri gormek icin 'l' \ncikmak icin 't' tuslayiniz:");
+        scanf(" %c",&istek);
+
+
+
+
+
+    if(istek=='q')
+    {
+
+
+
+
+
+        loadMenu(menu, &menuSize, menuFilename);
+
+            printf("Yemek Seciniz:\n");
 
             for (int i = 0; i < menuSize; i++)
             {
@@ -170,19 +188,19 @@ int main() {
     struct tm *local_time;
     current_time = time(NULL);
     local_time = localtime(&current_time);
-    strftime(orderTime, sizeof(orderTime), "%Y-%m-%d %H:%M:%S", local_time);
+    strftime(orderTime, sizeof(orderTime), "%Y-%m-%d-%H:%M:%S", local_time);
 
 
     char chef[10]="Sef1";
     int state=0;
 
 
-    FILE *file = fopen("Siparisler.txt", "w"); // "w" modunda açarak mevcut verileri üzerine yaz
+    FILE *file = fopen("Siparisler.txt", "a");
 
     if (file == NULL)
     {
         printf("Dosya açma hatası!");
-        return 1; // Programı sonlandır
+
     }
 
 
@@ -191,6 +209,131 @@ int main() {
     fprintf(file, "%s %s %.2f %s %d %s %s %d\n",id,name,price,orderTime,preparationTime,isim,chef,state);
 
     fclose(file);
+
+
+
+
+
+
+    }
+
+    if(istek=='l')
+    {
+
+    OrderList(orders,&orderSize,orderFilename);
+
+
+
+             printf("Onaylanmayan siparisler:\n");
+
+            for (int i = 0; i <orderSize; i++)
+            {
+
+
+
+
+
+
+                if( orders[i].state==0&&strcmp(orders[i].orderId,id) == 0)
+                {
+
+
+
+                   printf("%s %s %f %s %d %s %s %d\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime,
+                   orders[i].preparationTime,
+                   orders[i].customer,
+                   orders[i].chef,
+                   orders[i].state);
+
+
+                }
+            }
+
+
+
+            printf("Onaylanan siparisler:\n");
+
+            for (int i = 1; i <orderSize; i++)
+            {
+
+                if( orders[i].state==1&&strcmp(orders[i].orderId,id) == 0)
+                {
+
+
+
+                   printf("%s %s %f %s %d %s %s %d\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime,
+                   orders[i].preparationTime,
+                   orders[i].customer,
+                   orders[i].chef,
+                   orders[i].state);
+
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+            printf("Eski siparisler:\n");
+
+            for (int i = 0; i <orderSize; i++)
+            {
+
+                if( orders[i].state==2&&strcmp(orders[i].orderId,id) == 0)
+                {
+
+
+
+                   printf("%s %s %f %s %d %s %s %d\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime,
+                   orders[i].preparationTime,
+                   orders[i].customer,
+                   orders[i].chef,
+                   orders[i].state);
+
+
+                }
+            }
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+    }while(istek!='t');
+
+
+
+
 
 
 }

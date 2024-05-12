@@ -9,7 +9,7 @@ typedef struct {
 } MenuItem;
 
 typedef struct {
-    char orderId[20];
+    char orderId[50];
     char foodName[50];
     float price;
     char orderTime[20];
