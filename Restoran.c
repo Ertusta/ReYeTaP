@@ -13,7 +13,7 @@ int main() {
     char filename[] = "Yemeklistesi.txt"; // Dosya adı
     loadMenu(menu, &menuSize, filename);
     char date[11];
-
+    char secenek;
     char choice;
     do {
         printf("Yemek Listesi Ayarlari icin '1'\n");
@@ -27,19 +27,55 @@ int main() {
         switch (choice) {
             case '1':
                 printf("Yemek Listesi Ayarlari bolumu.\n");
-                foodListSettings();
+                printf("Yemek eklemek icin 'e'\nyemek listesini gormek icin 'l'\nyemek bilgisi guncellemek icin 'g'\nyemek silmek icin 's' basiniz:\n");
+                scanf(" %c",&secenek);
+                if (secenek == 'e' || secenek == 'E') {
+                    printf("Eklemek istediginiz yemegi yazin: ");
+                    scanf("%49s", menu[menuSize].name);
+                    printf("Fiyat: ");
+                    scanf("%f", &menu[menuSize].price);
+                    printf("Hazirlik suresi (dakika): ");
+                    scanf("%d", &menu[menuSize].preparationTime);
+                    printf("Mevcut mu? (Evet/Hayir): ");
+                    scanf("%19s", menu[menuSize].availability);
+                    menuSize++;
+                    saveMenu(menu, menuSize, filename);
+                    printf("Yemek eklendi ve %s dosyasina kaydedildi.\n", filename);
+                }else if (secenek == 'l' || secenek == 'L') {
+                    printf("Yemek Listesi:\n");
+                    for (int i = 0; i < menuSize; i++) {
+                        printf("%s: %.2f TL (%d dakika) - %s\n", 
+                            menu[i].name, 
+                            menu[i].price, 
+                            menu[i].preparationTime, 
+                            menu[i].availability);
+                    }
+                }else if (secenek == 'g' || secenek == 'G') {
+                    updateMenuItem(menu, &menuSize, filename);
+                }else if (secenek == 's' || secenek == 'S') {
+                    deleteMenuItem(menu, &menuSize, filename);
+                }    
                 break;
             case '2':
-                printf("Yemek Onaylamak Icin bolumu.\n");
-                confirmOrder();
+                printf("Yemek Onaylama bolumu.\n");
+                updateOrderStatus("Siparisler.txt");
                 break;
             case '3':
                 printf("Arsiv Islemleri bolumu.\n");
-                archiveOperations();
+                printf("Gunluk rapor kaydetmek icin 'u'\nGunluk rapor goruntulemek icin 'a' giriniz:\n");
+                scanf(" %c",&secenek);
+                if (secenek == 'u' || secenek == 'U'){
+                    printf("Lutfen arsivlemek istediginiz tarihi YYYY-MM-DD formatinda giriniz: ");
+                    scanf("%10s", date);
+                    archiveDailyOrders("Siparisler.txt", date);
+                }else if (secenek == 'a' || secenek == 'A'){
+                    printf("Lutfen goruntulemek istediginiz tarihi YYYY-MM-DD formatinda giriniz: ");
+                    scanf("%10s", date);
+                    viewDailyReport(date);
+                }
                 break;
             case '4':
                 printf("Analiz Islemleri bolumu.\n");
-                analysisOperations();
                 break;
             case 'q':
             case 'Q':

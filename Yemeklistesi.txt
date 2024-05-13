@@ -3,3 +3,4 @@ kebap 100.00 30 Evet
 pilav 25.00 15 Evet
 kofte 55.00 25 Evet
 makarna 40.00 25 Evet
+doner 85.00 15 Evet

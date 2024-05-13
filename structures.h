@@ -156,6 +156,7 @@ void updateOrderStatus(const char *filename) {
         // Orijinal dosyayı geçici dosya ile değiştir
         remove(filename);
         rename("temp.txt", filename);
+        printf("En ustteki onaylanmamis olan siparis onaylandi.\n");
     }
 
 }
@@ -281,124 +282,6 @@ void OrderList(Order orders[], int *orderSize, const char *filename) {
 }
 
 
-void foodListSettings() {
-    char choice;
-    do {
-        printf("Yemek eklemek icin 'e'\n");
-        printf("Yemek bilgisini guncellemek icin 'g'\n");
-        printf("Yemek silmek icin 's'\n");
-        printf("Yemek listesini gormek icin 'l'\n");
-        printf("Ana menuye donmek icin 'q'\n");
-        printf("Seciminiz: ");
-        scanf(" %c", &choice);
-
-        switch (choice) {
-            case 'e':
-            case 'E':
-                printf("Yemek eklemek istediginiz bolum.\n");
-                // Yemek ekleme fonksiyonunu çağır
-                break;
-            case 'g':
-            case 'G':
-                printf("Yemek bilgisini guncellemek istediginiz bolum.\n");
-                // Yemek bilgisi güncelleme fonksiyonunu çağır
-                break;
-            case 's':
-            case 'S':
-                printf("Yemek silmek istediginiz bolum.\n");
-                // Yemek silme fonksiyonunu çağır
-                break;
-            case 'l':
-            case 'L':
-                printf("Yemek listesini gormek istediginiz bolum.\n");
-                // Yemek listesini gösterme fonksiyonunu çağır
-                break;
-            case 'q':
-            case 'Q':
-                printf("Ana menuye donuldu.\n");
-                break;
-            default:
-                printf("Gecersiz secim. Lutfen tekrar deneyin.\n");
-        }
-    } while (choice != 'q' && choice != 'Q');
-}
-
-void confirmOrder() {
-    printf("Yemek onaylamak icin 'o' bolumu.\n");
-    // Yemek onaylama fonksiyonunu çağır
-}
-
-void archiveOperations() {
-    char choice;
-    do {
-        printf("Gunluk rapor kaydetmek icin 'u'\n");
-        printf("Gunluk rapor goruntulemek icin 'a'\n");
-        printf("Ana menuye donmek icin 'q'\n");
-        printf("Seciminiz: ");
-        scanf(" %c", &choice);
-
-        switch (choice) {
-            case 'u':
-            case 'U':
-                printf("Gunluk rapor kaydetmek istediginiz bolum.\n");
-                // Gunluk rapor kaydetme fonksiyonunu çağır
-                break;
-            case 'a':
-            case 'A':
-                printf("Gunluk rapor goruntulemek istediginiz bolum.\n");
-                // Gunluk rapor goruntuleme fonksiyonunu çağır
-                break;
-            case 'q':
-            case 'Q':
-                printf("Ana menuye donuldu.\n");
-                break;
-            default:
-                printf("Gecersiz secim. Lutfen tekrar deneyin.\n");
-        }
-    } while (choice != 'q' && choice != 'Q');
-}
-
-void analysisOperations() {
-    char choice;
-    do {
-        printf("Gunluk kazanc icin 'k'\n");
-        printf("Aylik kazanc icin 'm'\n");
-        printf("Donem kazanci icin 'n'\n");
-        printf("En cok tuketim icin 'p'\n");
-        printf("Ana menuye donmek icin 'q'\n");
-        printf("Seciminiz: ");
-        scanf(" %c", &choice);
-
-        switch (choice) {
-            case 'k':
-            case 'K':
-                printf("Gunluk kazanc istediginiz bolum.\n");
-                // Gunluk kazanc fonksiyonunu çağır
-                break;
-            case 'm':
-            case 'M':
-                printf("Aylik kazanc istediginiz bolum.\n");
-                // Aylik kazanc fonksiyonunu çağır
-                break;
-            case 'n':
-            case 'N':
-                printf("Donem kazanci istediginiz bolum.\n");
-                // Donem kazanci fonksiyonunu çağır
-                break;
-            case 'p':
-            case 'P':
-                printf("En cok tuketim istediginiz bolum.\n");
-                // En cok tuketim fonksiyonunu çağır
-                break;
-            case 'q':
-            case 'Q':
-                printf("Ana menuye donuldu.\n");
-                break;
-            default:
-                printf("Gecersiz secim. Lutfen tekrar deneyin.\n");
-        }
-    } while (choice != 'q' && choice != 'Q');
-}
 
 
 
