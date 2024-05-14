@@ -15,6 +15,14 @@ int main() {
     char date[11];
     char secenek;
     char choice;
+    char directory[] = "arsiv";
+    int year, month;
+    float dailyRevenue, monthlyRevenue, periodRevenue;
+    char startDate[11], endDate[11];
+    
+
+
+
     do {
         printf("Yemek Listesi Ayarlari icin '1'\n");
         printf("Yemek Onaylamak Icin icin '2'\n");
@@ -76,6 +84,47 @@ int main() {
                 break;
             case '4':
                 printf("Analiz Islemleri bolumu.\n");
+                printf("Lutfen bir secim yapiniz:\n");
+                printf("1 - Gunluk Kazanc\n");
+                printf("2 - Aylik Kazanc\n");
+                printf("3 - Iki Donem Arasindaki Kazanc\n");
+                printf("Seciminiz: ");
+                scanf("%d", &choice);
+                switch(choice) {
+                    case 1:
+                        // Kullanıcıdan tarih bilgisi isteniyor
+                        printf("Lutfen gunluk kazanci hesaplamak icin tarihi YYYY-MM-DD formatinda giriniz: ");
+                        scanf("%10s", date);
+                        // Günlük kazancı hesaplayıp ekrana yazdırıyoruz
+                        printf("Gunluk Kazanc: %.2f\n", calculateDailyRevenue(date, directory));
+                        break;
+                    case 2:
+                        // Kullanıcıdan yıl ve ay bilgisi isteniyor
+                        printf("Lutfen aylik kazanci hesaplamak icin yili ve ayi giriniz.\n");
+                        printf("Yil: ");
+                        scanf("%d", &year);
+                        printf("Ay: ");
+                        scanf("%d", &month);
+                        // Aylık kazancı hesaplayıp ekrana yazdırıyoruz
+                        printf("Aylik Kazanc: %.2f\n", calculateMonthlyRevenue(year, month, directory));
+                        break;
+                    case 3:
+                        // Kullanıcıdan dönem başlangıç ve bitiş tarihleri isteniyor
+                        printf("Lutfen donem kazancini hesaplamak icin baslangic tarihini YYYY-MM-DD formatinda giriniz: ");
+                        scanf("%10s", startDate);
+                        printf("Lutfen donem kazancini hesaplamak icin bitis tarihini YYYY-MM-DD formatinda giriniz: ");
+                        scanf("%10s", endDate);
+
+                        // Dönem kazancı hesaplanıyor ve sonuç ekrana yazdırılıyor
+                        periodRevenue = calculatePeriodRevenue(startDate, endDate, directory);
+                        if (periodRevenue >= 0) {
+                            printf("Donem Kazanci: %.2f\n", periodRevenue);
+                        }
+
+                    default:
+                        printf("Gecersiz secim yaptiniz.\n");
+                }
+
                 break;
             case 'q':
             case 'Q':

@@ -282,7 +282,93 @@ void OrderList(Order orders[], int *orderSize, const char *filename) {
 }
 
 
+// Dosya ismini tarih formatına dönüştürme
+void extractDateFromFilename(char *filename, char *date) {
+    // "Siparis_YYYY-MM-DD.txt" formatından tarihi çıkarır
+    strncpy(date, filename + 8, 10);
+    date[10] = '\0'; // Sonlandırıcı karakter eklenir
+}
 
+// Belirtilen tarihe ait siparişlerin toplam kazancını hesaplama
+float calculateDailyRevenue(char *date, char *directory) {
+    float totalRevenue = 0.0;
+    char filename[256];
+    sprintf(filename, "%s/Siparis_%s.txt", directory, date);
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Hata: '%s' tarihine ait dosya bulunamadi.\n", date);
+        return -1;
+    }
+
+    Order order;
+    while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n", 
+                  order.orderId, order.foodName, &order.price) == 3) {
+        totalRevenue += order.price;
+    }
+
+    fclose(file);
+    return totalRevenue;
+}
+
+// Belirtilen aya ait siparişlerin toplam kazancını hesaplama
+float calculateMonthlyRevenue(int year, int month, char *directory) {
+    float totalRevenue = 0.0;
+    char date[11];
+    char filename[256];
+    FILE *file;
+    int fileFound = 0; // Dosya bulunup bulunmadığını kontrol etmek için değişken
+    for (int day = 1; day <= 31; day++) {
+        sprintf(date, "%04d-%02d-%02d", year, month, day);
+        sprintf(filename, "%s/Siparis_%s.txt", directory, date);
+        file = fopen(filename, "r");
+        if (file) {
+            fileFound = 1; // Dosya bulundu
+            Order order;
+            while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n", 
+                          order.orderId, order.foodName, &order.price) == 3) {
+                totalRevenue += order.price;
+            }
+            fclose(file);
+        }
+    }
+    if (!fileFound) {
+        printf("Hata: '%04d-%02d' ayina ait hicbir dosya bulunamadi.\n", year, month);
+        return -1;
+    }
+    return totalRevenue;
+}
+
+// İki tarih arasındaki siparişlerin toplam kazancını hesaplama
+float calculatePeriodRevenue(char *startDate, char *endDate, char *directory) {
+    float totalRevenue = 0.0;
+    // Tarihleri yıl, ay ve gün olarak parçalara ayırma
+    int startYear, startMonth, startDay, endYear, endMonth, endDay;
+    sscanf(startDate, "%4d-%2d-%2d", &startYear, &startMonth, &startDay);
+    sscanf(endDate, "%4d-%2d-%2d", &endYear, &endMonth, &endDay);
+
+    // Başlangıç ve bitiş tarihleri arasında döngü
+    char currentDate[11];
+    int fileFound = 0; // Dosya bulunup bulunmadığını kontrol etmek için değişken
+    for (int year = startYear; year <= endYear; year++) {
+        for (int month = (year == startYear ? startMonth : 1); 
+             month <= (year == endYear ? endMonth : 12); month++) {
+            for (int day = (year == startYear && month == startMonth ? startDay : 1); 
+                 day <= (year == endYear && month == endMonth ? endDay : 31); day++) {
+                sprintf(currentDate, "%04d-%02d-%02d", year, month, day);
+                float dailyRevenue = calculateDailyRevenue(currentDate, directory);
+                if (dailyRevenue >= 0) {
+                    fileFound = 1; // En az bir dosya bulundu
+                    totalRevenue += dailyRevenue;
+                }
+            }
+        }
+    }
+    if (!fileFound) {
+        printf("Hata: '%s' ile '%s' tarihleri arasinda hicbir dosya bulunamadi.\n", startDate, endDate);
+        return -1;
+    }
+    return totalRevenue;
+}
 
 
 #endif 
