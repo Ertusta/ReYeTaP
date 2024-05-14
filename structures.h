@@ -17,6 +17,7 @@ typedef struct {
     char customer[20];
     char chef[20];
     int state;
+    int finalTime
 } Order;
 
 // Menüyü dosyadan yükle
@@ -30,10 +31,10 @@ void loadMenu(MenuItem menu[], int *menuSize, const char *filename) {
     char line[100];
     *menuSize = 0;
     while (fgets(line, sizeof(line), file)) {
-        if (sscanf(line, "%s %f %d %s", 
-                   menu[*menuSize].name, 
-                   &menu[*menuSize].price, 
-                   &menu[*menuSize].preparationTime, 
+        if (sscanf(line, "%s %f %d %s",
+                   menu[*menuSize].name,
+                   &menu[*menuSize].price,
+                   &menu[*menuSize].preparationTime,
                    menu[*menuSize].availability) == 4) {
             (*menuSize)++;
         }
@@ -50,10 +51,10 @@ void saveMenu(MenuItem menu[], int menuSize, const char *filename) {
         return;
     }
     for (int i = 0; i < menuSize; i++) {
-        fprintf(file, "%s %.2f %d %s\n", 
-                menu[i].name, 
-                menu[i].price, 
-                menu[i].preparationTime, 
+        fprintf(file, "%s %.2f %d %s\n",
+                menu[i].name,
+                menu[i].price,
+                menu[i].preparationTime,
                 menu[i].availability);
     }
     fclose(file);
@@ -115,9 +116,9 @@ void deleteMenuItem(MenuItem menu[], int *menuSize, const char *filename) {
     printf("Yemek silindi.\n");
 }
 
- //Siparişi Onaylama  
+ //Siparişi Onaylama
 void approveOrder(Order *order) {
-    order->state = 1; // Siparişi onayla 
+    order->state = 1; // Siparişi onayla
 }
 void updateOrderStatus(const char *filename) {
     FILE *file = fopen(filename, "r");
@@ -164,7 +165,7 @@ void updateOrderStatus(const char *filename) {
 
 // Tarihe göre dosya adı oluştur
 void createFileName(char *fileName, const char *date) {
-    char folderPath[256] = "arsiv"; 
+    char folderPath[256] = "arsiv";
     sprintf(fileName, "%s/Siparis_%s.txt", folderPath, date);
 }
 
@@ -285,4 +286,4 @@ void OrderList(Order orders[], int *orderSize, const char *filename) {
 
 
 
-#endif 
+#endif
