@@ -13,7 +13,7 @@ struct Asci {
     int hour;
     int minute;
 };
-
+//t
 // En erken biten asci isini bulan fonksiyon
 int findEarliestAsci(struct Asci asci[], int asciNumber) {
     // En erken bitiþ saati ve asci iþinin indeksi
