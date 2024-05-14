@@ -8,13 +8,13 @@
 #define MAX_MENU_ITEMS 50
 #define MAX_ORDERS 100
 
-// Asci yapýsý tanýmlamasý
+// Asci yapisi tanimlamasi
 struct Asci {
     int hour;
     int minute;
 };
 
-// En erken biten asci iþini bulan fonksiyon
+// En erken biten asci isini bulan fonksiyon
 int findEarliestAsci(struct Asci asci[], int asciNumber) {
     // En erken bitiþ saati ve asci iþinin indeksi
     int earliestFinishHour = asci[0].hour;
@@ -33,13 +33,8 @@ int findEarliestAsci(struct Asci asci[], int asciNumber) {
     return earliestAsciIndex;
 }
 
-// Belirli bir asci iþini güncellemek için fonksiyon
-void updateAsci(struct Asci asci[], int index, int newHour, int newMinute) {
 
-    asci[index].hour = newHour;
-    asci[index].minute = newMinute;
-}
-//suanki zamaný alan fonksiyon
+//suanki zamani alan fonksiyon
 void getCurrentTime(int *hour, int *minute) {
     time_t currentTime;
     struct tm *localTime;
@@ -53,7 +48,7 @@ void getCurrentTime(int *hour, int *minute) {
     *minute = localTime->tm_min;
 }
 
-// Aþçýnýn çalýþma zamanýný kontrol eden ve güncelleyen fonksiyon
+// Asçinin çalisma zamanini kontrol eden ve güncelleyen fonksiyon
 void updateAsciTime(struct Asci *asci) {
     int currentHour, currentMinute;
 
@@ -123,7 +118,7 @@ int main() {
                 //saat ve dakika birleþtirilir
                 sprintf(birlestirilmisZaman, "%02d:%02d",asci[earliestAsciIndex].hour,asci[earliestAsciIndex].minute);
 
-                //tekrar atanmasýn diye
+                //tekrar atanmasin diye
                 orders[i].state=2;
 
                 //atanan asci ve saatleri göster
@@ -135,7 +130,7 @@ int main() {
 
 
 
-    //buraya da seçilen siparise atanan ascý , saatin  state in dosyaya atanmasý kalýyor
+    //buraya da seçilen siparise atanan asci , saatin  state in dosyaya atanmasý kalýyor
 
     return 0;
 }
