@@ -17,7 +17,7 @@ typedef struct {
     char customer[20];
     char chef[20];
     int state;
-    int finalTime
+    int finalTime;
 } Order;
 
 // Menüyü dosyadan yükle
