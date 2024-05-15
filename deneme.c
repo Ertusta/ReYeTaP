@@ -11,6 +11,7 @@ typedef struct {
     char customer[20];
     char chef[20];
     int state;
+    char finalTime;
 } Order;
 
 // En çok tüketilen yemeği bulan fonksiyon
@@ -44,7 +45,7 @@ void findMostConsumedFood(const char *directory) {
                 }
 
                 // Dosyadaki her siparişi oku
-                while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
+                while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d %*s\n",
                               order.orderId, order.foodName, &order.price) == 3) {
                     // Yemek ismini ve sayısını güncelle
                     int found = 0;
@@ -119,7 +120,7 @@ void findMostProfitableDay(const char *directory) {
                 date[10] = '\0'; // Sonlandırıcı karakter eklenir
 
                 // Dosyadaki her siparişi oku
-                while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
+                while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d %*s\n",
                               order.orderId, order.foodName, &order.price) == 3) {
                     // Tarihi ve kazancı güncelle
                     int found = 0;
@@ -188,7 +189,7 @@ void findMostFrequentCustomer(const char *directory) {
                 }
 
                 // Dosyadaki her siparişi oku
-                while (fscanf(file, "%s %s %f %s %*d %s %*s %*d\n",
+                while (fscanf(file, "%s %s %f %s %*d %s %*s %*d %*s\n",
                               order.orderId, order.foodName, &order.price, order.orderTime, order.customer) == 5) {
                     // Müşteri ismini ve sipariş sayısını güncelle
                     int found = 0;
