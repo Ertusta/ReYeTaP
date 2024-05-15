@@ -144,13 +144,13 @@ void updateOrderStatus(const char *filename) {
     int isOrderApproved = 0;
 
     // Dosyadan siparişleri oku ve onaylanmamış olanları bul
-    while (fscanf(file, "%s %s %f %s %d %s %s %d\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state) != EOF) {
+    while (fscanf(file, "%s %s %f %s %d %s %s %d %s\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state, order.finalTime) != EOF) {
         if (order.state == 0 && !isOrderApproved) { // İlk onaylanmamış sipariş
             approveOrder(&order); // Siparişi onayla
             isOrderApproved = 1;
         }
         // Siparişi geçici dosyaya yaz
-        fprintf(tempFile, "%s %s %.2f %s %d %s %s %d\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state);
+        fprintf(tempFile, "%s %s %.2f %s %d %s %s %d %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
     }
 
     fclose(file);
@@ -188,7 +188,7 @@ void archiveDailyOrders(const char *filename, const char *date) {
 
     int found = 0; // Tarih eşleşmesi kontrolü için değişken
     Order order;
-    while (fscanf(file, "%s %s %f %s %d %s %s %d\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state) != EOF) {
+    while (fscanf(file, "%s %s %f %s %d %s %s %d %s\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state, order.finalTime) != EOF) {
         if (strncmp(order.orderTime, date, 10) == 0) {
             found = 1; // Eşleşen tarih bulundu
             break;
@@ -218,11 +218,11 @@ void archiveDailyOrders(const char *filename, const char *date) {
         }
 
         // Siparişleri tekrar oku ve dosyalara yaz
-        while (fscanf(file, "%s %s %f %s %d %s %s %d\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state) != EOF) {
+        while (fscanf(file, "%s %s %f %s %d %s %s %d %s\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state, order.finalTime) != EOF) {
             if (strncmp(order.orderTime, date, 10) == 0) {
-                fprintf(dailyFile, "%s %s %.2f %s %d %s %s %d\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state);
+                fprintf(dailyFile, "%s %s %.2f %s %d %s %s %d %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
             } else {
-                fprintf(tempFile, "%s %s %.2f %s %d %s %s %d\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state);
+                fprintf(tempFile, "%s %s %.2f %s %d %s %s %d %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
             }
         }
 
@@ -251,8 +251,8 @@ void viewDailyReport(const char *date) {
     Order order;
     printf("Tarih: %s\n", date);
     printf("Siparis ID | Yemek Adi | Fiyat | Siparis Zamani | Hazirlik Suresi | Musteri | sef | Durum\n");
-    while (fscanf(dailyFile, "%s %s %f %s %d %s %s %d\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state) != EOF) {
-        printf("%s | %s | %.2f | %s | %d | %s | %s | %d\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state);
+    while (fscanf(dailyFile, "%s %s %f %s %d %s %s %d %s\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state, order.finalTime) != EOF) {
+        printf("%s | %s | %.2f | %s | %d | %s | %s | %d | %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
     }
 
     fclose(dailyFile);
@@ -310,7 +310,7 @@ float calculateDailyRevenue(char *date, char *directory) {
     }
 
     Order order;
-    while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
+    while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d %*s\n",
                   order.orderId, order.foodName, &order.price) == 3) {
         totalRevenue += order.price;
     }
@@ -333,7 +333,7 @@ float calculateMonthlyRevenue(int year, int month, char *directory) {
         if (file) {
             fileFound = 1; // Dosya bulundu
             Order order;
-            while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
+            while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d %*s\n",
                           order.orderId, order.foodName, &order.price) == 3) {
                 totalRevenue += order.price;
             }
