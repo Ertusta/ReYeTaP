@@ -8,59 +8,7 @@
 #define MAX_MENU_ITEMS 50
 #define MAX_ORDERS 100
 
-// Asci yapisi tanimlamasi
-struct Asci {
-    int hour;
-    int minute;
-};
-//t
-// En erken biten asci isini bulan fonksiyon
-int findEarliestAsci(struct Asci asci[], int asciNumber) {
-    // En erken bitiþ saati ve asci iþinin indeksi
-    int earliestFinishHour = asci[0].hour;
-    int earliestFinishMinute = asci[0].minute;
-    int earliestAsciIndex = 0;
 
-    // Asci iþlerinin bitiþ saatlerini kontrol et
-    for(int i = 1; i < asciNumber; i++) {
-        if (asci[i].hour < earliestFinishHour || (asci[i].hour == earliestFinishHour && asci[i].minute < earliestFinishMinute)) {
-            earliestFinishHour = asci[i].hour;
-            earliestFinishMinute = asci[i].minute;
-            earliestAsciIndex = i;
-        }
-    }
-
-    return earliestAsciIndex;
-}
-
-
-//suanki zamani alan fonksiyon
-void getCurrentTime(int *hour, int *minute) {
-    time_t currentTime;
-    struct tm *localTime;
-
-    // Anlýk zamaný al
-    currentTime = time(NULL);
-    localTime = localtime(&currentTime);
-
-    // Saati ve dakikayý döndür
-    *hour = localTime->tm_hour;
-    *minute = localTime->tm_min;
-}
-
-// Asçinin çalisma zamanini kontrol eden ve güncelleyen fonksiyon
-void updateAsciTime(struct Asci *asci) {
-    int currentHour, currentMinute;
-
-    // Anlýk saat ve dakikayý al
-    getCurrentTime(&currentHour, &currentMinute);
-
-    // Eðer aþçýnýn çalýþma saati þu andan gerideyse, aþçýnýn zamanýný güncelle
-    if (asci->hour < currentHour || (asci->hour == currentHour && asci->minute < currentMinute)) {
-        asci->hour = currentHour;
-        asci->minute = currentMinute;
-    }
-}
 
 int main() {
     int asciNumber;
@@ -73,11 +21,11 @@ int main() {
     char birlestirilmisZaman[6];
 
     FILE *file = fopen("Asci.txt", "r");
-    //ilk satýr asci sayisi
+    //ilk satÃ½r asci sayisi
     fscanf(file, "%d", &asciNumber);
     for(int i = 0; i < asciNumber; i++)
     {
-        fscanf(file, "%d %d", &asci[i].hour, &asci[i].minute); // Her bir asci elemanýna saat ve dakika al
+        fscanf(file, "%d %d", &asci[i].hour, &asci[i].minute); // Her bir asci elemanÃ½na saat ve dakika al
     }
     fclose(file);
 
@@ -102,7 +50,7 @@ int main() {
              earliestAsciIndex = findEarliestAsci(asci, asciNumber);
 
 
-            // saat dakika hazýrlamasý
+            // saat dakika hazÃ½rlamasÃ½
              int time1 =orders[i].preparationTime +asci[earliestAsciIndex].minute;
              if(time1>=60)
                 {
@@ -115,13 +63,17 @@ int main() {
                     asci[earliestAsciIndex].minute=time1;
                 }
 
-                //saat ve dakika birleþtirilir
+                //saat ve dakika birleÃ¾tirilir
                 sprintf(birlestirilmisZaman, "%02d:%02d",asci[earliestAsciIndex].hour,asci[earliestAsciIndex].minute);
 
                 //tekrar atanmasin diye
                 orders[i].state=2;
 
-                //atanan asci ve saatleri göster
+                strcpy(orders[i].finalTime, birlestirilmisZaman);
+                sprintf(orders[i].chef, "asci%d", earliestAsciIndex+1);
+
+
+                //atanan asci ve saatleri gÃ¶ster
                 printf("%s:\n",orders[i].foodName);
                 printf("asci%d: %s\n\n",earliestAsciIndex ,birlestirilmisZaman);
         }
@@ -130,7 +82,40 @@ int main() {
 
 
 
-    //buraya da seçilen siparise atanan asci , saatin  state in dosyaya atanmasý kalýyor
+
+
+
+
+    file = fopen(orderFilename, "w");
+    if (file == NULL) {
+        printf("Dosya aÃ§Ä±lamadÄ±.\n");
+        return;
+    }
+
+
+        for(int i = 0; i < orderSize; i++)
+    {
+
+        fprintf(file, "%s %s %.2f %s %d %s %s %d %s\n",
+                orders[i].orderId,
+                orders[i].foodName,
+                orders[i].price,
+                orders[i].orderTime,
+                orders[i].preparationTime,
+                orders[i].customer,
+                orders[i].chef,
+                orders[i].state,
+                orders[i].finalTime);
+
+
+
+    }
+
+    // DosyayÄ± baÅŸtan sona tarayarak ilgili sipariÅŸi bul
+
+
+
+
 
     return 0;
 }

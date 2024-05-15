@@ -81,7 +81,7 @@ int main() {
     local_time = localtime(&current_time);
     strftime(orderTime, sizeof(orderTime), "%Y-%m-%d/%H:%M:%S", local_time);
 
-    char chef[10]="Sef1";
+    char chef[10]="0";
     int state=0;
 
     FILE *file = fopen("Siparisler.txt", "a");
@@ -92,7 +92,9 @@ int main() {
 
     }
 
-    fprintf(file, "%s %s %.2f %s %d %s %s %d\n",id,name,price,orderTime,preparationTime,isim,chef,state);
+    char time[20]="00:00";
+
+    fprintf(file, "%s %s %.2f %s %d %s %s %d %s\n",id,name,price,orderTime,preparationTime,isim,chef,state,time);
     fclose(file);
 
     printf("yemek secmeye devam etmek icin l siparisi yollamak icin q tiklayiniz:");
