@@ -8,6 +8,13 @@ typedef struct {
     char availability[20];
 } MenuItem;
 
+
+// Asci yapisi tanimlamasi
+struct Asci {
+    int hour;
+    int minute;
+};
+
 typedef struct {
     char orderId[50];
     char foodName[50];
@@ -17,7 +24,7 @@ typedef struct {
     char customer[20];
     char chef[20];
     int state;
-    int finalTime;
+    char finalTime[20];
 } Order;
 
 // Menüyü dosyadan yükle
@@ -274,7 +281,8 @@ void OrderList(Order orders[], int *orderSize, const char *filename) {
                    &orders[*orderSize].preparationTime,
                    orders[*orderSize].customer,
                    orders[*orderSize].chef,
-                   &orders[*orderSize].state) == 8) {
+                   &orders[*orderSize].state,
+                   orders[*orderSize].finalTime) > 0) {
             (*orderSize)++;
         }
     }
@@ -302,7 +310,7 @@ float calculateDailyRevenue(char *date, char *directory) {
     }
 
     Order order;
-    while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n", 
+    while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
                   order.orderId, order.foodName, &order.price) == 3) {
         totalRevenue += order.price;
     }
@@ -325,7 +333,7 @@ float calculateMonthlyRevenue(int year, int month, char *directory) {
         if (file) {
             fileFound = 1; // Dosya bulundu
             Order order;
-            while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n", 
+            while (fscanf(file, "%s %s %f %*s %*d %*s %*s %*d\n",
                           order.orderId, order.foodName, &order.price) == 3) {
                 totalRevenue += order.price;
             }
@@ -351,9 +359,9 @@ float calculatePeriodRevenue(char *startDate, char *endDate, char *directory) {
     char currentDate[11];
     int fileFound = 0; // Dosya bulunup bulunmadığını kontrol etmek için değişken
     for (int year = startYear; year <= endYear; year++) {
-        for (int month = (year == startYear ? startMonth : 1); 
+        for (int month = (year == startYear ? startMonth : 1);
              month <= (year == endYear ? endMonth : 12); month++) {
-            for (int day = (year == startYear && month == startMonth ? startDay : 1); 
+            for (int day = (year == startYear && month == startMonth ? startDay : 1);
                  day <= (year == endYear && month == endMonth ? endDay : 31); day++) {
                 sprintf(currentDate, "%04d-%02d-%02d", year, month, day);
                 float dailyRevenue = calculateDailyRevenue(currentDate, directory);
@@ -371,5 +379,55 @@ float calculatePeriodRevenue(char *startDate, char *endDate, char *directory) {
     return totalRevenue;
 }
 
+
+// En erken biten asci isini bulan fonksiyon
+int findEarliestAsci(struct Asci asci[], int asciNumber) {
+    // En erken bitiþ saati ve asci iþinin indeksi
+    int earliestFinishHour = asci[0].hour;
+    int earliestFinishMinute = asci[0].minute;
+    int earliestAsciIndex = 0;
+
+    // Asci iþlerinin bitiþ saatlerini kontrol et
+    for(int i = 1; i < asciNumber; i++) {
+        if (asci[i].hour < earliestFinishHour || (asci[i].hour == earliestFinishHour && asci[i].minute < earliestFinishMinute)) {
+            earliestFinishHour = asci[i].hour;
+            earliestFinishMinute = asci[i].minute;
+            earliestAsciIndex = i;
+        }
+    }
+
+    return earliestAsciIndex;
+}
+
+
+
+//suanki zamani alan fonksiyon
+void getCurrentTime(int *hour, int *minute) {
+    time_t currentTime;
+    struct tm *localTime;
+
+    // Anlýk zamaný al
+    currentTime = time(NULL);
+    localTime = localtime(&currentTime);
+
+    // Saati ve dakikayý döndür
+    *hour = localTime->tm_hour;
+    *minute = localTime->tm_min;
+}
+
+// Asçinin çalisma zamanini kontrol eden ve güncelleyen fonksiyon
+
+void updateAsciTime(struct Asci *asci) {
+    int currentHour, currentMinute;
+
+    // Anlýk saat ve dakikayý al
+    getCurrentTime(&currentHour, &currentMinute);
+
+    // Eðer aþçýnýn çalýþma saati þu andan gerideyse, aþçýnýn zamanýný güncelle
+    if (asci->hour < currentHour || (asci->hour == currentHour && asci->minute < currentMinute)) {
+        asci->hour = currentHour;
+        asci->minute = currentMinute;
+    }
+}
 
 #endif
