@@ -104,7 +104,20 @@ int main() {
     }
     else if(istek=='l')
     {
+
     OrderList(orders,&orderSize,orderFilename);
+
+
+
+
+
+
+
+
+
+
+
+
              printf("Onaylanmayan siparisler:\n");
 
             for (int i = 0; i <orderSize; i++)
@@ -131,7 +144,7 @@ int main() {
             {
                 if( orders[i].state==1&&strcmp(orders[i].customer,isim) == 0)
                 {
-                   printf("%s %s %.2f %s %d %s %s %d\n",
+                   printf("%s %s %.2f %s %d %s %s %d %s\n",
                    orders[i].orderId,
                    orders[i].foodName,
                    orders[i].price,
@@ -139,18 +152,49 @@ int main() {
                    orders[i].preparationTime,
                    orders[i].customer,
                    orders[i].chef,
-                   orders[i].state);
+                   orders[i].state,
+                   orders[i].finalTime);
                 }
             }
 
-            printf("Eski siparisler:\n");
+            printf("yapilan siparisler:\n");
 
             for (int i = 0; i <orderSize; i++)
             {
 
+
+                char ramram[20];
+
+                strcpy(ramram, orders[i].finalTime);
+
+                char *token = strtok(orders[i].finalTime, ":");
+                int hour = atoi(token);
+                token = strtok(NULL, ":");
+                int minute = atoi(token);
+
+                strcpy(orders[i].finalTime, ramram);
+                time_t t = time(NULL);
+                struct tm *tm = localtime(&t);
+                int current_hour = tm->tm_hour;
+                int current_minute = tm->tm_min;
+
+
+                if(hour<current_hour)
+                {
+
+                    orders[i].state=3;
+
+                }
+                else if(hour==current_hour&&minute<current_minute)
+                {
+                    orders[i].state=3;
+                }
+
+
+
                 if( orders[i].state==2&&strcmp(orders[i].customer,isim) == 0)
                 {
-                   printf("%s %s %.2f %s %d %s %s %d\n",
+                   printf("%s %s %.2f %s %d %s %s %d %s\n",
                    orders[i].orderId,
                    orders[i].foodName,
                    orders[i].price,
@@ -158,9 +202,78 @@ int main() {
                    orders[i].preparationTime,
                    orders[i].customer,
                    orders[i].chef,
-                   orders[i].state);
+                   orders[i].state,
+                   orders[i].finalTime);
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
+            printf("Hazir siparisler:\n");
+
+            for (int i = 0; i <orderSize; i++)
+            {
+
+                char ramram[20];
+
+                strcpy(ramram, orders[i].finalTime);
+                char *token = strtok(orders[i].finalTime, ":");
+                int hour = atoi(token);
+                token = strtok(NULL, ":");
+                int minute = atoi(token);
+
+
+                strcpy(orders[i].finalTime, ramram);
+
+
+
+                time_t t = time(NULL);
+                struct tm *tm = localtime(&t);
+                int current_hour = tm->tm_hour;
+                int current_minute = tm->tm_min;
+
+
+
+            if(hour<current_hour)
+                {
+
+                    orders[i].state=3;
+
+                }
+                else if(hour==current_hour&&minute<current_minute)
+                {
+                    orders[i].state=3;
+                }
+
+
+
+
+                if( orders[i].state==3&&strcmp(orders[i].customer,isim) == 0)
+                {
+                   printf("%s %s %.2f %s %d %s %s %d %s\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime,
+                   orders[i].preparationTime,
+                   orders[i].customer,
+                   orders[i].chef,
+                   orders[i].state,
+                   orders[i].finalTime);
+                }
+            }
+
+
+
+
         }
     }while(istek!='t');
 return 76;
