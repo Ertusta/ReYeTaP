@@ -273,7 +273,7 @@ void OrderList(Order orders[], int *orderSize, const char *filename) {
     char line[100];
     *orderSize = 0;
     while (fgets(line, sizeof(line), file)) {
-        if (sscanf(line, "%s %s %f %s %d %s %s %d",
+        if (sscanf(line, "%s %s %f %s %d %s %s %d %s",
                    orders[*orderSize].orderId,
                    orders[*orderSize].foodName,
                    &orders[*orderSize].price,
