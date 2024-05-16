@@ -1,5 +1,9 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
+#include <dirent.h>
+#define MAX_PATH_LEN 256
+#define MAX_FILE_LEN 256
+#define MAX_LINE_LEN 1024
 
 typedef struct {
     char name[50];
@@ -427,6 +431,57 @@ void updateAsciTime(struct Asci *asci) {
     if (asci->hour < currentHour || (asci->hour == currentHour && asci->minute < currentMinute)) {
         asci->hour = currentHour;
         asci->minute = currentMinute;
+    }
+}
+
+void readTxtFiles(Order orders[], int *orderSize,const char *dirPath) {
+    DIR *dir;
+    struct dirent *ent;
+    FILE *file;
+    char filePath[MAX_PATH_LEN];
+    char line[MAX_LINE_LEN];
+
+    if ((dir = opendir(dirPath)) != NULL) {
+        while ((ent = readdir(dir)) != NULL) {
+            if (strstr(ent->d_name, ".txt") != NULL) {
+                snprintf(filePath, sizeof(filePath), "%s/%s", dirPath, ent->d_name);
+                file = fopen(filePath, "r");
+                if (file) {
+
+                    while (fgets(line, sizeof(line), file)) {
+
+
+                             if (sscanf(line, "%s %s %f %s %d %s %s %d %s",
+                   orders[*orderSize].orderId,
+                   orders[*orderSize].foodName,
+                   &orders[*orderSize].price,
+                   orders[*orderSize].orderTime,
+                   &orders[*orderSize].preparationTime,
+                   orders[*orderSize].customer,
+                   orders[*orderSize].chef,
+                   &orders[*orderSize].state,
+                   orders[*orderSize].finalTime) > 0) {
+
+            (*orderSize)++;
+        }
+
+
+
+
+
+
+                    }
+                    fclose(file);
+                    printf("\n");
+                } else {
+                    fprintf(stderr, "Error opening file: %s\n", filePath);
+                }
+            }
+        }
+        closedir(dir);
+    } else {
+        perror("Error opening directory");
+        exit(EXIT_FAILURE);
     }
 }
 

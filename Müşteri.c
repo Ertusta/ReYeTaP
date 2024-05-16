@@ -11,55 +11,7 @@
 #define MAX_FILE_LEN 256
 #define MAX_LINE_LEN 1024
 
-void readTxtFiles(Order orders[], int *orderSize,const char *dirPath) {
-    DIR *dir;
-    struct dirent *ent;
-    FILE *file;
-    char filePath[MAX_PATH_LEN];
-    char line[MAX_LINE_LEN];
 
-    if ((dir = opendir(dirPath)) != NULL) {
-        while ((ent = readdir(dir)) != NULL) {
-            if (strstr(ent->d_name, ".txt") != NULL) {
-                snprintf(filePath, sizeof(filePath), "%s/%s", dirPath, ent->d_name);
-                file = fopen(filePath, "r");
-                if (file) {
-
-                    while (fgets(line, sizeof(line), file)) {
-
-
-                             if (sscanf(line, "%s %s %f %s %d %s %s %d %s",
-                   orders[*orderSize].orderId,
-                   orders[*orderSize].foodName,
-                   &orders[*orderSize].price,
-                   orders[*orderSize].orderTime,
-                   &orders[*orderSize].preparationTime,
-                   orders[*orderSize].customer,
-                   orders[*orderSize].chef,
-                   &orders[*orderSize].state,
-                   orders[*orderSize].finalTime) > 0) {
-            (*orderSize)++;
-        }
-
-
-
-
-
-
-                    }
-                    fclose(file);
-                    printf("\n");
-                } else {
-                    fprintf(stderr, "Error opening file: %s\n", filePath);
-                }
-            }
-        }
-        closedir(dir);
-    } else {
-        perror("Error opening directory");
-        exit(EXIT_FAILURE);
-    }
-}
 
 int main() {
 
@@ -273,6 +225,8 @@ int main() {
             printf("Hazir siparisler:\n");
 
 
+            readTxtFiles(orders,&orderSize,"arsiv");
+
             for (int i = 0; i <orderSize; i++)
             {
 
@@ -309,7 +263,7 @@ int main() {
 
 
 
-/*
+
                 if( orders[i].state==3&&strcmp(orders[i].customer,isim) == 0)
                 {
                    printf("%s %s %.2f %s %d %s %s %d %s\n",
@@ -323,32 +277,16 @@ int main() {
                    orders[i].state,
                    orders[i].finalTime);
                 }
-                */
-            }
-
-
-
-
-            readTxtFiles(orders,&orderSize,"arsiv");
-
-
-            for(int i;i<orderSize;i++)
-            {
-                if(strcmp(isim, orders[i].customer) == 0) {
-
-                printf("%s %s %.2f %s %d %s %s %d %s\n",
-                   orders[i].orderId,
-                   orders[i].foodName,
-                   orders[i].price,
-                   orders[i].orderTime,
-                   orders[i].preparationTime,
-                   orders[i].customer,
-                   orders[i].chef,
-                   orders[i].state,
-                   orders[i].finalTime);
-                }
 
             }
+
+
+
+
+
+
+
+
 
 
 
