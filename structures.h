@@ -4,6 +4,8 @@
 #define MAX_PATH_LEN 256
 #define MAX_FILE_LEN 256
 #define MAX_LINE_LEN 1024
+#define MAX_MENU_ITEMS 50
+#define MAX_ORDERS 100
 
 typedef struct {
     char name[50];
@@ -697,4 +699,242 @@ void findMostFrequentCustomer(const char *directory) {
     // En çok sipariş veren kullanıcıyı ve sipariş sayısını yazdır
     printf("En cok siparis veren kullanici: %s (%d siparis)\n", mostFrequentCustomer, maxOrderCount);
 }
+
+//id olusturma
+char* getId()
+{
+    char kod[30];
+    static char *id[50];
+
+        time_t current_time;
+        struct tm *local_time;
+        current_time = time(NULL);
+        local_time = localtime(&current_time);
+        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
+        sprintf(id, "Sip_%s", kod);
+
+    return id;
+}
+//menu göster
+void showMenu(MenuItem menu[], int *menuSize)
+{
+    printf("Yemek Seciniz:\n");
+            for (int i = 0; i < *menuSize; i++)
+            {
+                if (strcmp(menu[i].availability, "Evet") == 0)
+                {
+                    printf("%s: %.2f TL (%d dakika) - %s\n",
+                       menu[i].name,
+                       menu[i].price,
+                       menu[i].preparationTime,
+                       menu[i].availability);
+                }
+            }
+}
+//siparis olusturmak icin
+void siparisOlustur(char id[20],char isim[25])
+{
+
+    MenuItem menu[MAX_MENU_ITEMS];
+    int menuSize = 0;
+    char name[50];
+    float price;
+    int preparationTime;
+    char orderTime[20];
+    char menuFilename[] = "yemeklistesi.txt";
+
+
+    loadMenu(menu, &menuSize, menuFilename);
+
+
+            int found=0;
+            do {
+                    scanf("%s", name);
+
+                    for (int i = 0; i < menuSize; i++) {
+                        if (strcmp(menu[i].name, name) == 0 && strcmp(menu[i].availability, "Evet") == 0) {
+                            price = menu[i].price;
+                            preparationTime = menu[i].preparationTime;
+
+                            time_t current_time;
+                            struct tm *local_time;
+                            current_time = time(NULL);
+                            local_time = localtime(&current_time);
+                            strftime(orderTime, sizeof(orderTime), "%Y-%m-%d/%H:%M:%S", local_time);
+
+                            char chef[10]="0";
+                            int state=0;
+                            char time[20]="00:00";
+
+                            FILE *file = fopen("Siparisler.txt", "a");
+                            fprintf(file, "%s %s %.2f %s %d %s %s %d %s\n",id,name,price,orderTime,preparationTime,isim,chef,state,time);
+                            fclose(file);
+
+
+                            found = 1;
+                            break; // Break out of the for loop once a match is found
+                            }
+                        }
+
+                    if (found==1) {
+
+                    } else {
+                    printf("bulunamadi tekrar dene.\n");
+                            }
+                    } while (!found);
+
+
+}
+void tumSiparisleriGoster(char isim[20])
+{
+    Order orders[MAX_ORDERS];
+    int orderSize = 0;
+    char orderFilename[] = "Siparisler.txt";
+
+                OrderList(orders,&orderSize,orderFilename);
+
+
+
+            int control=0;
+            for (int i = 0; i <orderSize; i++)
+            {
+
+                if( orders[i].state==0&&strcmp(orders[i].customer,isim) == 0)
+                {
+
+                    if(control==0)
+                    {
+                        printf("Onaylanmayan siparisler:\n");
+                        control=1;
+                    }
+                   printf("Siparis Id:%s Yemek ismi:%s Fiyat:%.2f Siparis Zamani:%s\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime);
+                }
+            }
+
+
+            control=0;
+            for (int i = 1; i <orderSize; i++)
+            {
+                if( orders[i].state==1&&strcmp(orders[i].customer,isim) == 0)
+                {
+                     if(control==0)
+                    {
+                        printf("\nOnaylanan siparisler:\n");
+                        control=1;
+                    }
+
+                   printf("Siparis Id:%s Yemek ismi:%s Fiyat:%.2f Siparis Zamani:%s\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime);
+                }
+            }
+
+
+            control=0;
+            for (int i = 0; i <orderSize; i++)
+            {
+
+
+
+
+
+                char *token = strtok(orders[i].finalTime, ":");
+                int hour = atoi(token);
+                token = strtok(NULL, ":");
+                int minute = atoi(token);
+
+                time_t t = time(NULL);
+                struct tm *tm = localtime(&t);
+                int current_hour = tm->tm_hour;
+                int current_minute = tm->tm_min;
+
+                sprintf(orders[i].finalTime, "%d",hour * 60 + minute - current_hour * 60 - current_minute);
+
+                if(hour<current_hour&&orders[i].state!=0)
+                {
+
+                    orders[i].state=3;
+
+                }
+                else if(hour==current_hour&&minute<current_minute&&orders[i].state!=0)
+                {
+                    orders[i].state=3;
+                }
+
+
+
+                if( orders[i].state==2&&strcmp(orders[i].customer,isim) == 0)
+                {
+                    if(control==0)
+                    {
+                        printf("\nyapilan siparisler:\n");
+                        control=1;
+                    }
+                   printf("Siparis Id:%s Yemek ismi:%s Fiyat:%.2f Siparis Zamani:%s Kalan zaman:%s\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime,
+                   orders[i].finalTime);
+                }
+            }
+
+
+
+
+
+            readTxtFiles(orders,&orderSize,"arsiv");
+            control=0;
+            for (int i = 0; i <orderSize; i++)
+            {
+
+                char *token = strtok(orders[i].finalTime, ":");
+                int hour = atoi(token);
+                token = strtok(NULL, ":");
+                int minute = atoi(token);
+
+                time_t t = time(NULL);
+                struct tm *tm = localtime(&t);
+                int current_hour = tm->tm_hour;
+                int current_minute = tm->tm_min;
+
+                sprintf(orders[i].finalTime, "%d",hour * 60 + minute - current_hour * 60 - current_minute);
+
+
+
+            if(hour<current_hour&&orders[i].state!=0)
+                {
+
+                    orders[i].state=3;
+
+                }
+                else if(hour==current_hour&&minute<current_minute&&orders[i].state!=0)
+                {
+                    orders[i].state=3;
+                }
+
+                if( orders[i].state==3&&strcmp(orders[i].customer,isim) == 0)
+                {
+                    if(control==0)
+                    {
+                        printf("Hazir siparisler:\n");
+                        control=1;
+                    }
+
+                   printf("Siparis Id:%s Yemek ismi:%s Fiyat:%.2f Siparis Zamani:%s\n",
+                   orders[i].orderId,
+                   orders[i].foodName,
+                   orders[i].price,
+                   orders[i].orderTime);
+                }
+
+            }
+
+        }
 #endif
