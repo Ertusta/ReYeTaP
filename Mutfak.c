@@ -88,7 +88,6 @@ int main() {
     file = fopen(orderFilename, "w");
     if (file == NULL) {
         printf("Dosya açılamadı.\n");
-        return;
     }
 
 
