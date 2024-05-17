@@ -7,11 +7,21 @@
 
 #define MAX_MENU_ITEMS 50
 #define MAX_ORDERS 100
-#define MAX_PATH_LEN 256
-#define MAX_FILE_LEN 256
-#define MAX_LINE_LEN 1024
 
+char getId()
+{
+    char kod[20];
+    char id[50];
 
+        time_t current_time;
+        struct tm *local_time;
+        current_time = time(NULL);
+        local_time = localtime(&current_time);
+        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
+        sprintf(id, "Sip_%s", kod);
+
+    return id;
+}
 
 int main() {
 
@@ -27,27 +37,25 @@ int main() {
     char id[50];
     char isim[25];
     char orderTime[20];
-    char kod[20];
+
 
         printf("isim giriniz:");
         scanf(" %s",isim);
 
 
     do{
-        printf("siparis vermek icin 'q' \nmevcut ve eski siparisleri gormek icin 'l' \ncikmak icin 't' tuslayiniz:");
+        printf("siparis vermek icin '1' \nmevcut ve eski siparisleri gormek icin '2' \ncikmak icin '3' tuslayiniz:");
         scanf(" %c",&istek);
+
         loadMenu(menu, &menuSize, menuFilename);
 
 
-    if(istek=='q')
+    if(istek=='1')
     {
-        time_t current_time;
-        struct tm *local_time;
-        current_time = time(NULL);
-        local_time = localtime(&current_time);
-        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
-        sprintf(id, "Sip_%s", kod);
-        loadMenu(menu, &menuSize, menuFilename);
+
+
+        id=getId();
+
 
         do{
             printf("Yemek Seciniz:\n");
@@ -107,7 +115,7 @@ int main() {
 
         }while(komut!= 'q' );
     }
-    else if(istek=='l')
+    else if(istek=='2')
     {
 
     OrderList(orders,&orderSize,orderFilename);
@@ -295,6 +303,6 @@ int main() {
 
 
         }
-    }while(istek!='t');
+    }while(istek!='3');
 return 76;
 }
