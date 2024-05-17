@@ -77,14 +77,6 @@ int main() {
                 printf("asci%d: %s\n\n",earliestAsciIndex ,birlestirilmisZaman);
         }
     }
-
-
-
-
-
-
-
-
     file = fopen(orderFilename, "w");
     if (file == NULL) {
         printf("Dosya açılamadı.\n");
