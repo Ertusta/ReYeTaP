@@ -88,6 +88,7 @@ int main() {
                 printf("1 - Gunluk Kazanc\n");
                 printf("2 - Aylik Kazanc\n");
                 printf("3 - Iki Donem Arasindaki Kazanc\n");
+                printf("4 - En Cok Tuketim.\n");
                 printf("Seciminiz: ");
                 scanf("%d", &choice);
                 switch(choice) {
@@ -120,7 +121,12 @@ int main() {
                         if (periodRevenue >= 0) {
                             printf("Donem Kazanci: %.2f\n", periodRevenue);
                         }
-
+                        break;
+                    case 4:
+                        findMostConsumedFood("arsiv");
+                        findMostProfitableDay("arsiv");
+                        findMostFrequentCustomer("arsiv");
+                        break;
                     default:
                         printf("Gecersiz secim yaptiniz.\n");
                 }
