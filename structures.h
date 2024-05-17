@@ -434,7 +434,7 @@ void updateAsciTime(struct Asci *asci) {
         asci->minute = currentMinute;
     }
 }
-
+//dosyadaki tum txtleri okur
 void readTxtFiles(Order orders[], int *orderSize,const char *dirPath) {
     DIR *dir;
     struct dirent *ent;
