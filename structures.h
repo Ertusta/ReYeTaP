@@ -224,8 +224,9 @@ void archiveDailyOrders(const char *filename, const char *date) {
         // Siparişleri tekrar oku ve dosyalara yaz
         while (fscanf(file, "%s %s %f %s %d %s %s %d %s\n", order.orderId, order.foodName, &order.price, order.orderTime, &order.preparationTime, order.customer, order.chef, &order.state, order.finalTime) != EOF) {
             if (strncmp(order.orderTime, date, 10) == 0) {
-                fprintf(dailyFile, "%s %s %.2f %s %d %s %s %d %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
-            } else {
+                // State'i 3 olarak güncelle ve günlük dosyaya yaz
+                fprintf(dailyFile, "%s %s %.2f %s %d %s %s 3 %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.finalTime);
+            }else {
                 fprintf(tempFile, "%s %s %.2f %s %d %s %s %d %s\n", order.orderId, order.foodName, order.price, order.orderTime, order.preparationTime, order.customer, order.chef, order.state, order.finalTime);
             }
         }
