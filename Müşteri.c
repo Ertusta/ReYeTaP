@@ -22,8 +22,8 @@ int main() {
     float price;
     int preparationTime;
 
-        printf("isim giriniz:");
-        scanf(" %s",isim);
+    printf("isim giriniz:");
+    scanf(" %s",isim);
 
     do{
         printf("siparis vermek icin '1' \nmevcut ve eski siparisleri gormek icin '2' \ncikmak icin '3' tuslayiniz:");
@@ -47,7 +47,7 @@ int main() {
     printf("yemek secmeye devam etmek icin '1' siparisi yollamak icin '2' tiklayiniz:");
     scanf(" %c",&komut);
 
-        }while(komut!= '2' );
+         }while(komut!= '2' );
     }
     else if(istek=='2')
     {
