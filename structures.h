@@ -974,6 +974,21 @@ int updateChefCount(const char *filename, int yeniAsciSayisi) {
     return EXIT_SUCCESS;
 }
 
+void yazdir(struct Asci asci[], int asciNumber, const char *dosyaAdi) {
+    FILE *file = fopen(dosyaAdi, "w"); // Dosyayı yazma modunda aç
+
+    if (file == NULL) {
+        printf("Dosya açılamadı.\n");
+        return;
+    }
+
+    fprintf(file, "%d\n",asciNumber);
+    for (int i = 0; i < asciNumber; i++) {
+        fprintf(file, "%d:%02d\n", asci[i].hour, asci[i].minute);
+    }
+
+    fclose(file); // Dosyayı kapat
+}
 
         
 #endif

@@ -101,7 +101,9 @@ int main() {
 
     }
 
-    // Dosyayı baştan sona tarayarak ilgili siparişi bul
+    yazdir(asci, asciNumber, "Asci.txt");
+    printf("Veriler Asci.txt dosyasina yazildi.\n");
+    
 
 
 
