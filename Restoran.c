@@ -19,7 +19,7 @@ int main() {
     int year, month;
     float dailyRevenue, monthlyRevenue, periodRevenue;
     char startDate[11], endDate[11];
-    
+    int yeniAsciSayisi;
 
 
 
@@ -28,6 +28,7 @@ int main() {
         printf("Yemek Onaylamak Icin icin '2'\n");
         printf("Arsiv Islemleri icin '3'\n");
         printf("Analiz Islemleri icin '4'\n");
+        printf("Asci Sayisini Guncellemek icin '5'.\n");
         printf("Cikis icin 'q'\n");
         printf("Seciminiz: ");
         scanf(" %c", &choice);
@@ -126,12 +127,21 @@ int main() {
                         findMostConsumedFood("arsiv");
                         findMostProfitableDay("arsiv");
                         findMostFrequentCustomer("arsiv");
-                        break;
+                        break;  
                     default:
                         printf("Gecersiz secim yaptiniz.\n");
                 }
 
-                break;
+            case '5':
+                printf("Yeni asci sayisini giriniz: ");
+                scanf("%d", &yeniAsciSayisi);
+
+                // Fonksiyonu çağır
+                if (updateChefCount("Asci.txt", yeniAsciSayisi) == EXIT_FAILURE) {
+                    return EXIT_FAILURE;
+                }
+                printf("Asci sayisi başariyla guncellendi.\n");
+                break;   
             case 'q':
             case 'Q':
                 printf("Cikis yapildi.\n");

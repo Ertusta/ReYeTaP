@@ -701,20 +701,27 @@ void findMostFrequentCustomer(const char *directory) {
 }
 
 //id olusturma
-char* getId()
-{
-    char kod[30];
-    static char *id[50];
+#include <stdio.h>
+#include <time.h>
 
-        time_t current_time;
-        struct tm *local_time;
-        current_time = time(NULL);
-        local_time = localtime(&current_time);
-        strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
-        sprintf(id, "Sip_%s", kod);
+char* getId() {
+    static char id[50]; // id'yi statik bir char dizisi olarak tanımlayın
+
+    time_t current_time;
+    struct tm *local_time;
+    current_time = time(NULL);
+    local_time = localtime(&current_time);
+
+    // Kod dizisini yerel olarak tanımlayın
+    char kod[30];
+    strftime(kod, sizeof(kod), "%Y%m%d%H%M%S", local_time);
+
+    // id içine yazın
+    sprintf(id, "Sip_%s", kod);
 
     return id;
 }
+
 //menu göster
 void showMenu(MenuItem menu[], int *menuSize)
 {
@@ -886,9 +893,6 @@ void tumSiparisleriGoster(char isim[20])
             }
 
 
-
-
-
             readTxtFiles(orders,&orderSize,"arsiv");
             control=0;
             for (int i = 0; i <orderSize; i++)
@@ -937,4 +941,39 @@ void tumSiparisleriGoster(char isim[20])
             }
 
         }
+
+// Aşçı sayısını güncelleyen fonksiyon
+int updateChefCount(const char *filename, int yeniAsciSayisi) {
+    // Geçici bir dosya oluştur
+    FILE *tempFile = fopen("temp.txt", "w");
+    FILE *file = fopen(filename, "r");
+    if (tempFile == NULL || file == NULL) {
+        perror("Dosya açılamadı veya oluşturulamadı");
+        return EXIT_FAILURE;
+    }
+
+    // Yeni aşçı sayısını geçici dosyaya yaz
+    fprintf(tempFile, "%d\n", yeniAsciSayisi);
+
+    // İlk satırı atla
+    fscanf(file, "%*d\n");
+
+    // Geri kalan içeriği geçici dosyaya kopyala
+    char buffer;
+    while ((buffer = fgetc(file)) != EOF) {
+        fputc(buffer, tempFile);
+    }
+
+    fclose(file);
+    fclose(tempFile);
+
+    // Geçici dosyayı orijinal dosya ile değiştir
+    remove(filename);
+    rename("temp.txt", filename);
+
+    return EXIT_SUCCESS;
+}
+
+
+        
 #endif
