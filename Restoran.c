@@ -102,8 +102,8 @@ int main()
             printf("3 - Iki Donem Arasindaki Kazanc\n");
             printf("4 - En Cok Tuketim.\n");
             printf("Seciminiz: ");
-            scanf("%d", &choice);
-            switch (choice)
+            scanf("%d", &secenek);
+            switch (secenek)
             {
             case 1:
                 // Kullanıcıdan tarih bilgisi isteniyor
@@ -144,7 +144,7 @@ int main()
             default:
                 printf("Gecersiz secim yaptiniz.\n");
             }
-
+            break;
         case '5':
             printf("Yeni asci sayisini giriniz: ");
             scanf("%d", &yeniAsciSayisi);
